@@ -641,7 +641,7 @@ remoteStorage.displayWidget();
             );
 
             var labelColor = "default";
-            if(dueMoment.isBefore(moment())) {
+            if(!task.isCompleted && dueMoment.isBefore(moment())) {
                 labelColor = "danger";
             }
             var dueLabel = e(
