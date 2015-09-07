@@ -523,7 +523,7 @@ remoteStorage.displayWidget();
         this.setState({
             summary: task.summary || "",
             description: task.description || "",
-            due: task.due.toString() || ""
+            due: task.due && task.due.toString() || ""
         });
       },
       stateToTask: function(task) {
