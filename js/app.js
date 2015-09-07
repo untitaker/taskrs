@@ -620,6 +620,39 @@ remoteStorage.displayWidget();
       }
     });
 
+    var TaskDueLabel = React.createClass({
+        displayName: "TaskDueLabel",
+        componentDidMount: function() {
+            this.updateInterval = window.setInterval(this.forceUpdate, 60 * 30);
+        },
+        componentWillUnmount: function() {
+            window.clearInterval(this.updateInterval);
+            this.updateInterval = undefined;
+        },
+        render: function() {
+            var task = this.props.task;
+            if(!task.due) {
+                return null;
+            }
+            var dueMoment = moment(
+                task.due.convertToZone(
+                    ICAL.Timezone.localTimezone
+                ).toJSDate()
+            );
+
+            var labelColor = "default";
+            if(dueMoment.isBefore(moment())) {
+                labelColor = "danger";
+            }
+            var dueLabel = e(
+                "span",
+                {className: "label label-" + labelColor},
+                dueMoment.fromNow()
+            );
+            return dueLabel;
+        }
+    });
+
     var Task = React.createClass({
       displayName: "Task",
       getInitialState: function() {
@@ -678,7 +711,9 @@ remoteStorage.displayWidget();
                       title: "Edit task"
                   },
                   task.summary
-              )
+              ),
+              " ",
+              e(TaskDueLabel, {task: task})
           );
         }
         return inner;

@@ -1,5 +1,5 @@
 install:
-	bower install ical.js react remotestorage bootstrap
+	bower install ical.js react remotestorage bootstrap moment
 
 
 build-js:
@@ -8,6 +8,7 @@ build-js:
 		bower_components/remotestorage/remotestorage.js \
 		bower_components/ical.js/build/ical.js \
 		bower_components/react/react.js \
+		bower_components/moment/moment.js \
 		js/utils.js \
 		js/model.js \
 		js/app.js \
