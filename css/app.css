@@ -1,0 +1,20 @@
+#layout {
+    margin: 10px auto 0;
+    max-width: 750px;
+}
+
+.task.disabled * {
+    color: #333;
+    text-decoration: line-through;
+}
+
+.rs-bubble.rs-hidden {
+    display: none !important;
+}
+.remotestorage-state-initial .rs-action {
+    filter: grayscale(100%);
+}
+
+.task, #tasklists a {
+    border-left: 3px solid;
+}

@@ -1,0 +1,6 @@
+AddType text/cache-manifest .manifest
+
+# Firefox uses normal cache in addition to appcache.
+Header set Pragma "no-cache"
+Header set Cache-Control "no-cache"
+ExpiresDefault "access"
