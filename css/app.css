@@ -18,3 +18,7 @@
 .task, #tasklists a {
     border-left: 3px solid;
 }
+
+#sidebar {
+    margin-bottom: 10px;
+}

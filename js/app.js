@@ -104,7 +104,7 @@ remoteStorage.displayWidget();
             e(
                 "div", {className: "row"},
                 e(
-                    "div", {className: "col-md-4"},
+                    "div", {className: "col-md-4", id: "sidebar"},
                     e("h2", {className: "sr-only"}, "Task lists"),
                     e("p", null, editButton),
                     taskLists
