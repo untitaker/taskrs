@@ -3,7 +3,6 @@
 function TaskList(client, path) {
   this.client = client.scope(path);
   this.path = path;
-  this.blacklist = {};
 }
 
 (function() {
@@ -13,7 +12,7 @@ function TaskList(client, path) {
           var rv = [];
           var item;
           for(var name in listing) {
-            if(name.endsWith('.ics') && !this.blacklist[name]) {
+            if(name.endsWith('.ics')) {
               item = new TaskItem(this, name);
               rv.push(item);
             }
@@ -95,8 +94,8 @@ function TaskItem(tasklist, name) {
 (function() {
     TaskItem.prototype.ensureContent = function() {
         var that = this;
+        console.log("Parsing file", this);
         return new Promise(function(resolve, reject) {
-            if(that.jcal) { return resolve(that); };
             that.tasklist.client.getFile(that.name, false).then(function(file) {
                 if(!file.data) {
                     return reject(Error("Failed to fetch file."));
@@ -108,15 +107,10 @@ function TaskItem(tasklist, name) {
             }).catch(reject);
         });
     };
-    TaskItem.prototype.blacklistFile = function() {
-        this.tasklist.blacklist[this.name] = true;
-    };
 
     TaskItem.prototype.parseJcal = function() {
-        if(!this.vcalendar || !this.vtodo) {
-            this.vcalendar = new ICAL.Component(this.jcal);
-            this.vtodo = this.vcalendar.getFirstSubcomponent('vtodo');
-        }
+        this.vcalendar = new ICAL.Component(this.jcal);
+        this.vtodo = this.vcalendar.getFirstSubcomponent('vtodo');
     };
 
     TaskItem.prototype.replaceField = function(key, val) {

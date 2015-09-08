@@ -366,7 +366,6 @@ remoteStorage.displayWidget();
           Promise.all(tasks.map(function(task, i) {
             return task.ensureContent().catch(function(e) {
                 console.log("Skipping task", task, e);
-                task.blacklistFile();
                 return undefined;
             });
           })).then(function(tasks) {
@@ -376,7 +375,6 @@ remoteStorage.displayWidget();
                 }
                 if(task.jcal && task.vcalendar && !task.vtodo) {
                     // not a vtodo item, otherwise probably fine
-                    task.blacklistFile();
                     return false;
                 }
                 return true;
