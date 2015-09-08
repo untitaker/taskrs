@@ -623,7 +623,10 @@ remoteStorage.displayWidget();
     var TaskDueLabel = React.createClass({
         displayName: "TaskDueLabel",
         componentDidMount: function() {
-            this.updateInterval = window.setInterval(this.forceUpdate, 60 * 30);
+            this.updateInterval = window.setInterval(
+                this.forceUpdate,
+                1800 * 1000
+            );
         },
         componentWillUnmount: function() {
             window.clearInterval(this.updateInterval);
