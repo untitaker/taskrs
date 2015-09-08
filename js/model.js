@@ -94,7 +94,6 @@ function TaskItem(tasklist, name) {
 (function() {
     TaskItem.prototype.ensureContent = function() {
         var that = this;
-        console.log("Parsing file", this);
         return new Promise(function(resolve, reject) {
             that.tasklist.client.getFile(that.name, false).then(function(file) {
                 if(!file.data) {

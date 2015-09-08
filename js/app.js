@@ -520,7 +520,7 @@ remoteStorage.displayWidget();
       stateFromTask: function(task) {
         var due = task.due && moment(task.due.toJSDate());
         var dueDate = due && due.format("YYYY-MM-DD") || "";
-        var dueTime = !task.due.isDate && due.format("HH:MM") || "";
+        var dueTime = !task.due.isDate && due.format("hh:mm:ss") || "";
         this.setState({
             summary: task.summary || "",
             description: task.description || "",
@@ -542,10 +542,15 @@ remoteStorage.displayWidget();
             //   * 21:00 vs 21:00:00
             // Moment.js tries several formats automatically.
             var momentVal = moment(stringVal);
+            var icalVal = ICAL.Time.fromJSDate(momentVal.toDate(), false);
+            icalVal.isDate = !this.state.dueTime;
+            console.log("IsDate", icalVal.isDate);
+
             console.log(stringVal, "string");
             console.log(momentVal, "moment");
+            console.log(icalVal, "ical");
+            task.due = icalVal;
 
-            task.due = ICAL.Time.fromJSDate(momentVal.toDate(), false);
         } else {
             task.due = null;
         }
