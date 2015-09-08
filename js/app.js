@@ -618,30 +618,36 @@ remoteStorage.displayWidget();
         };
 
         var dueInput = e(
-            "div", {className: "form-group"},
+            "div", {className: "form-group row"},
             e(
-                "input",
-                {
-                    type: "date",
-                    name: "dueDate",
-                    className: "form-control",
-                    placeholder: "Due date",
-                    value: this.state.dueDate,
-                    onChange: dueDateChanges,
-                    onBlur: dueDateChanges  // https://github.com/facebook/react/issues/3659
-                }
+                "div", {className: "col-xs-6", style: {paddingRight: 0}},
+                e(
+                    "input",
+                    {
+                        type: "date",
+                        name: "dueDate",
+                        className: "form-control",
+                        placeholder: "Due date",
+                        value: this.state.dueDate,
+                        onChange: dueDateChanges,
+                        onBlur: dueDateChanges  // https://github.com/facebook/react/issues/3659
+                    }
+                )
             ),
             e(
-                "input",
-                {
-                    type: "time",
-                    name: "dueDate",
-                    className: "form-control",
-                    placeholder: "Due time",
-                    value: this.state.dueTime,
-                    onChange: dueTimeChanges,
-                    onBlur: dueTimeChanges  // https://github.com/facebook/react/issues/3659
-                }
+                "div", {className: "col-xs-6"},
+                e(
+                    "input",
+                    {
+                        type: "time",
+                        name: "dueTime",
+                        className: "form-control",
+                        placeholder: "Due time",
+                        value: this.state.dueTime,
+                        onChange: dueTimeChanges,
+                        onBlur: dueTimeChanges  // https://github.com/facebook/react/issues/3659
+                    }
+                )
             )
         );
 
