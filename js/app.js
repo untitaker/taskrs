@@ -508,14 +508,14 @@ remoteStorage.displayWidget();
     var TaskEditor = React.createClass({
       displayName: "TaskEditor",
       getInitialState: function() {
-        return {summary: "", description: "", dueDate: "", dueTime: ""};
+        return {summary: "", description: "", dueDate: "", dueTime: "", outdated: false};
       },
       componentDidMount: function() {
           this.stateFromTask(this.props.task);
           React.findDOMNode(this.refs.summary).focus();
       },
       componentWillReceiveProps: function(newProps) {
-          this.stateFromTask(newProps.task);
+          this.setState({outdated: true});
       },
       stateFromTask: function(task) {
         var due = task.due && moment(task.due.toJSDate());
@@ -595,10 +595,6 @@ remoteStorage.displayWidget();
                         value: this.state.summary,
                         onChange: function(e) { that.setState({summary: e.target.value}); }
                     }
-                ),
-                e(
-                    "span", {className: "input-group-btn"},
-                    e("input", {className: "btn btn-primary", type: "submit", value: "Save"})
                 )
             )
         );
@@ -649,23 +645,51 @@ remoteStorage.displayWidget();
             )
         );
 
+        var descriptionInput = e(
+            "div", {className: "form-group"},
+            e(
+                "textarea",
+                {
+                    className: "form-control",
+                    name: "description",
+                    placeholder: "Description: Further notes",
+                    value: this.state.description,
+                    onChange: function(e) { that.setState({description: e.target.value}); }
+                }
+            )
+        );
+
+        var submitButton = e(
+            "input",
+            {
+                type: "submit",
+                className: (
+                    "btn btn-block btn-" +
+                    (this.state.outdated ? "danger" : "primary")
+                ),
+                value: (this.state.outdated ? "Save anyway" : "Save")
+            }
+        );
+
+        if(this.state.outdated) {
+            submitButton = e(
+                "div",
+                {className: "alert alert-danger"},
+                e(
+                    "p", null,
+                    "This task has changed while you were editing it. ",
+                    "Saving your changes will discard those changes."
+                ),
+                submitButton
+            );
+        }
+
         return e(
             "form", {onSubmit: submitEdit},
             header,
             dueInput,
-            e(
-                "div", {className: "form-group"},
-                e(
-                    "textarea",
-                    {
-                        className: "form-control",
-                        name: "description",
-                        placeholder: "Description: Further notes",
-                        value: this.state.description,
-                        onChange: function(e) { that.setState({description: e.target.value}); }
-                    }
-                )
-            )
+            descriptionInput,
+            submitButton
         );
       }
     });
