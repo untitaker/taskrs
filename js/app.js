@@ -510,7 +510,7 @@ remoteStorage.displayWidget();
     var TaskEditor = React.createClass({
       displayName: "TaskEditor",
       getInitialState: function() {
-        return {summary: "", description: "", due: ""};
+        return {summary: "", description: "", dueDate: "", dueTime: ""};
       },
       componentDidMount: function() {
           this.stateFromTask(this.props.task);
@@ -520,16 +520,37 @@ remoteStorage.displayWidget();
           this.stateFromTask(newProps.task);
       },
       stateFromTask: function(task) {
+        var due = task.due && moment(task.due.toJSDate());
+        var dueDate = due && due.format("YYYY-MM-DD") || "";
+        var dueTime = !task.due.isDate && due.format("HH:MM") || "";
         this.setState({
             summary: task.summary || "",
             description: task.description || "",
-            due: task.due && task.due.toString() || ""
+            dueDate: dueDate,
+            dueTime: dueTime
         });
       },
       stateToTask: function(task) {
         task.summary = this.state.summary;
         task.description = this.state.description;
-        task.due = this.state.due;
+
+        if(this.state.dueDate) {
+            var stringVal = this.state.dueDate;
+            if(this.state.dueTime) {
+                stringVal += "T" + this.state.dueTime;
+            }
+
+            // Date-time inputs are inconsistent across browsers:
+            //   * 21:00 vs 21:00:00
+            // Moment.js tries several formats automatically.
+            var momentVal = moment(stringVal);
+            console.log(stringVal, "string");
+            console.log(momentVal, "moment");
+
+            task.due = ICAL.Time.fromJSDate(momentVal.toDate(), false);
+        } else {
+            task.due = null;
+        }
       },
       render: function() {
         var that = this;
@@ -584,17 +605,42 @@ remoteStorage.displayWidget();
             )
         );
 
+        var dueDateChanges = function(e) {
+            var val = e.target.value;
+            that.setState({
+                dueDate: val,
+                dueTime: val && that.state.dueTime || ""
+            });
+        };
+
+        var dueTimeChanges = function(e) {
+            that.setState({dueTime: e.target.value});
+        };
+
         var dueInput = e(
             "div", {className: "form-group"},
             e(
                 "input",
                 {
-                    type: "datetime",
-                    name: "due",
+                    type: "date",
+                    name: "dueDate",
                     className: "form-control",
                     placeholder: "Due date",
-                    value: this.state.due,
-                    onChange: function(e) { that.setState({due: e.target.value}); }
+                    value: this.state.dueDate,
+                    onChange: dueDateChanges,
+                    onBlur: dueDateChanges  // https://github.com/facebook/react/issues/3659
+                }
+            ),
+            e(
+                "input",
+                {
+                    type: "time",
+                    name: "dueDate",
+                    className: "form-control",
+                    placeholder: "Due time",
+                    value: this.state.dueTime,
+                    onChange: dueTimeChanges,
+                    onBlur: dueTimeChanges  // https://github.com/facebook/react/issues/3659
                 }
             )
         );
