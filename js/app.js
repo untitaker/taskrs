@@ -520,7 +520,7 @@ remoteStorage.displayWidget();
       stateFromTask: function(task) {
         var due = task.due && moment(task.due.toJSDate());
         var dueDate = due && due.format("YYYY-MM-DD") || "";
-        var dueTime = !task.due.isDate && due.format("hh:mm:ss") || "";
+        var dueTime = due && !task.due.isDate && due.format("hh:mm:ss") || "";
         this.setState({
             summary: task.summary || "",
             description: task.description || "",
