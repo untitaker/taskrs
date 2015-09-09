@@ -1,11 +1,12 @@
-install:
+install: install-bower install-npm
+
+install-bower:
 	bower install \
 		ical.js \
 		react \
 		remotestorage \
 		bootstrap \
 		moment
-
 
 build-js:
 	mkdir -p build/js
@@ -39,7 +40,7 @@ build: build-js build-css build-html
 	) > cache.manifest
 
 lint:
-	jshint js/*.js
+	eslint js/
 
 serve:
 	cd build && python3 -mhttp.server
