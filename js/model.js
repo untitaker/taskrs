@@ -3,7 +3,7 @@
 function TaskList(client, path) {
   this.client = client.scope(path);
   this.path = path;
-  this._itemCache = {}
+  this._itemCache = {};
 }
 
 (function() {
@@ -33,13 +33,13 @@ function TaskList(client, path) {
         }).catch(function(e) {
             console.log("Error while fetching color", that, e);
         });
-    }
+    };
 
     TaskList.prototype.setColor = function(val) {
         var that = this;
         // FIXME: validation
         return this.client.storeFile('text/plain', 'color', val);
-    }
+    };
 
     // These two are separate functions because one of them returns a promise
     // instead of the value.
@@ -118,7 +118,7 @@ function TaskItem(tasklist, name) {
             this.vcalendar = null;
             this._ensuredContent = false;
         }
-    }
+    };
 
     TaskItem.prototype.ensureContent = function() {
         var that = this;
