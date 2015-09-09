@@ -3,17 +3,21 @@
 function TaskList(client, path) {
   this.client = client.scope(path);
   this.path = path;
+  this._itemCache = {}
 }
 
 (function() {
     TaskList.prototype.listTasks = function() {
       return new Promise(function(resolve, reject) {
         this.client.getListing('', false).then(function(listing) {
+          var oldItemCache = this._itemCache;
+          this._itemCache = {};
           var rv = [];
           var item;
           for(var name in listing) {
             if(name.endsWith('.ics')) {
-              item = new TaskItem(this, name);
+              item = oldItemCache[name] || new TaskItem(this, name);
+              this._itemCache[name] = item;
               rv.push(item);
             }
           }
@@ -89,11 +93,39 @@ function TaskItem(tasklist, name) {
     this.jcal = null;
     this.vcalendar = null;
     this.vtodo = null;
+    this._ensuredContent = false;
+
+    console.log("new TaskItem", this);
+    // FIXME: Why does remoteStorage.js call event handlers with this ==
+    // window?
+    this.tasklist.client.on('change', this._handleChange.bind(this));
 }
 
 (function() {
+    TaskItem.prototype._handleChange = function(e) {
+        if(e.origin == "local") {
+            // Irrelevant event.
+        } else if(e.relativePath != this.name) {
+            // Not us.
+        } else if(e.oldValue && !e.newValue) {
+            // We got deleted, remove self.
+            console.log("TaskItem: Remove event listener", this);
+            this.tasklist.client.removeEventListener('change', this._handleChange);
+        } else {
+            console.log("TaskItem: Change detected.", this, e);
+            this.jcal = null;
+            this.vtodo = null;
+            this.vcalendar = null;
+            this._ensuredContent = false;
+        }
+    }
+
     TaskItem.prototype.ensureContent = function() {
         var that = this;
+        if(this._ensuredContent) {
+            return new Promise(function(a, b) { a(that); });
+        }
+
         return new Promise(function(resolve, reject) {
             that.tasklist.client.getFile(that.name, false).then(function(file) {
                 if(!file.data) {
@@ -101,6 +133,7 @@ function TaskItem(tasklist, name) {
                 } else {
                     that.jcal = ICAL.parse(file.data);
                     that.parseJcal();
+                    that._ensuredContent = true;
                     return resolve(that);
                 }
             }).catch(reject);
@@ -162,16 +195,25 @@ function TaskItem(tasklist, name) {
 RemoteStorage.defineModule('vdir_calendars', function(privateClient, publicClient) {
   privateClient.cache('');
 
+  var state = {
+      listCache: {}
+  };
+
   return {
     exports: {
       getLists: function() {
         return new Promise(function(resolve, reject) {
           privateClient.getListing('', false).then(
             function(listing) {
+              var oldListCache = state.listCache;
+              state.listCache = {};
               var rv = [];
+              var list;
               for(var name in listing) {
                 if(name.endsWith('/')) {
-                  rv.push(new TaskList(privateClient, name));
+                  list = oldListCache[name] || new TaskList(privateClient, name);
+                  state.listCache[name] = list;
+                  rv.push(list);
                 }
               }
               resolve(rv);

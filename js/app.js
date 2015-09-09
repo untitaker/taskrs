@@ -42,12 +42,13 @@ remoteStorage.displayWidget();
         return rv;
       },
       componentDidMount: function() {
-        this.loadLists();
         remoteStorage.on('connected', this.loadLists);
+        remoteStorage.on('not-connected', this.loadLists);
         remoteStorage.on('disconnected', this.loadLists);
       },
       componentWillUnmount: function() {
         remoteStorage.removeEventListener('connected', this.loadLists);
+        remoteStorage.removeEventListener('not-connected', this.loadLists);
         remoteStorage.removeEventListener('disconnected', this.loadLists);
       },
       render: function() {
@@ -421,6 +422,7 @@ remoteStorage.displayWidget();
       },
       componentWillReceiveProps: function(nextProps) {
           if(nextProps.shownLists != this.props.shownLists) {
+              console.log("TaskList: Lists updated");
               this.loadTasks(nextProps.shownLists);
           }
       },
