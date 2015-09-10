@@ -6,6 +6,7 @@ install-bower:
 		react \
 		remotestorage \
 		bootstrap \
+		bootswatch \
 		moment
 
 build-js:
@@ -23,7 +24,10 @@ build-js:
 build-css:
 	mkdir -p build/css build/fonts
 	cp -R bower_components/bootstrap/dist/fonts/* build/fonts/
-	cat bower_components/bootstrap/dist/css/bootstrap.css css/app.css > build/css/all.css
+	cat \
+		bower_components/bootswatch/flatly/bootstrap.css \
+		css/app.css \
+		> build/css/all.css
 
 build-html:
 	cp -R site/{*,.htaccess} build/
