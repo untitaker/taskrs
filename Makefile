@@ -7,7 +7,8 @@ install-bower:
 		remotestorage \
 		bootstrap \
 		bootswatch \
-		moment
+		moment \
+		autosize
 
 build-js:
 	mkdir -p build/js
@@ -16,6 +17,7 @@ build-js:
 		bower_components/ical.js/build/ical.js \
 		bower_components/react/react.js \
 		bower_components/moment/moment.js \
+		bower_components/autosize/dist/autosize.js \
 		js/utils.js \
 		js/model.js \
 		js/app.js \

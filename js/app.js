@@ -19,6 +19,19 @@ window.remoteStorage.displayWidget();
     var moment = window.moment;
     var ICAL = window.ICAL;
 
+    var Textarea = React.createClass({
+        displayName: "Textarea",
+        componentDidMount: function() {
+            window.autosize(React.findDOMNode(this.refs.textarea));
+        },
+        render: function() {
+            var that = this;
+            return e("textarea", Object.assign({}, this.props, {
+                ref: "textarea"
+            }));
+        }
+    });
+
     var App = React.createClass({
         displayName: "App",
         getInitialState: function() {
@@ -568,7 +581,6 @@ window.remoteStorage.displayWidget();
         render: function() {
             var that = this;
             var task = this.props.task;
-            console.log("TaskEditor on", task);
 
             var submitEdit = function(e) {
                 e.preventDefault();
@@ -663,7 +675,7 @@ window.remoteStorage.displayWidget();
             var descriptionInput = e(
                 "div", {className: "form-group"},
                 e(
-                    "textarea",
+                    Textarea,
                     {
                         className: "form-control",
                         name: "description",
