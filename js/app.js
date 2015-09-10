@@ -518,13 +518,19 @@ window.remoteStorage.displayWidget();
             this.stateFromTask(this.props.task);
             React.findDOMNode(this.refs.summary).focus();
         },
-        componentWillReceiveProps: function() {
-            this.setState({outdated: true});
+        componentWillReceiveProps: function(newProps) {
+            // Task gets a new jcal attribute when it is refetched
+            // If it's the same object, this event was probably fired by
+            // selecting task lists in the sidebar.
+            if(newProps.task.jcal != this._oldJcal) {
+                this.setState({outdated: true});
+            }
         },
         stateFromTask: function(task) {
             var due = task.due && moment(task.due.toJSDate());
             var dueDate = due && due.format("YYYY-MM-DD") || "";
             var dueTime = due && !task.due.isDate && due.format("hh:mm:ss") || "";
+            this._oldJcal = task.jcal;
             this.setState({
                 summary: task.summary || "",
                 description: task.description || "",
@@ -672,10 +678,7 @@ window.remoteStorage.displayWidget();
                 "input",
                 {
                     type: "submit",
-                    className: (
-                        "btn btn-block btn-" +
-                            (this.state.outdated ? "danger" : "primary")
-                    ),
+                    className: "btn btn-block btn-primary",
                     value: (this.state.outdated ? "Save anyway" : "Save")
                 }
             );
@@ -689,7 +692,7 @@ window.remoteStorage.displayWidget();
                         "This task has changed while you were editing it. ",
                         "Saving your changes will discard those changes."
                     ),
-                    submitButton
+                    e("p", null, submitButton)
                 );
             }
 
