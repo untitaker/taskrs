@@ -33,7 +33,6 @@ build: build-js build-css build-html
 		echo "CACHE MANIFEST"; \
 		echo "# Build: `date`"; \
 		echo "CACHE:"; \
-		echo "index.html"; \
 		find js css fonts -type f; \
 		echo "NETWORK:"; \
 		echo '*'; \

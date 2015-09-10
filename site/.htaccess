@@ -1,6 +1,11 @@
 AddType text/cache-manifest .manifest
 
-# Firefox uses normal cache in addition to appcache.
+# Firefox's appcache is extremely buggy. I don't really know what's wrong, but
+# somehow it is requesting resources when it shouldn't, and sometimes not
+# correctly invalidating the cache. Setting the following options magically
+# eliminates these problems while not killing the actual PURPOSE of the
+# appcache. Browsers who don't support the appcache probably get pretty slow
+# with this.
 # https://bugzilla.mozilla.org/show_bug.cgi?id=780197
 Header set Pragma "no-cache"
 Header set Cache-Control "no-cache"
