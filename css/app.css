@@ -22,3 +22,7 @@
 #sidebar {
     margin-bottom: 10px;
 }
+
+*:active, *:hover {
+    outline: none !important;
+}

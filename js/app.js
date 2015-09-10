@@ -61,7 +61,7 @@ window.remoteStorage.displayWidget();
             var editButton = e(
                 "button",
                 {
-                    className: "btn btn-sm btn-default",
+                    className: "btn btn-sm btn-default" + (that.state.isEditing ? " active" : ""),
                     onClick: function(e) {
                         e.preventDefault();
                         that.setState({isEditing: !that.state.isEditing});
