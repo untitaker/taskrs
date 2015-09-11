@@ -702,7 +702,7 @@ window.remoteStorage.displayWidget();
                             type: "date",
                             name: "dueDate",
                             className: "form-control",
-                            placeholder: "Due date",
+                            placeholder: "Due date, e.g. 2014-12-31",
                             value: this.state.dueDate,
                             onChange: dueDateChanges,
                             onBlur: dueDateChanges  // https://github.com/facebook/react/issues/3659
@@ -717,7 +717,7 @@ window.remoteStorage.displayWidget();
                             type: "time",
                             name: "dueTime",
                             className: "form-control",
-                            placeholder: "Due time",
+                            placeholder: "Due time, e.g. 14:20",
                             value: this.state.dueTime,
                             onChange: dueTimeChanges,
                             onBlur: dueTimeChanges  // https://github.com/facebook/react/issues/3659
