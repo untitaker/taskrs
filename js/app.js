@@ -68,7 +68,7 @@ window.remoteStorage.displayWidget();
                     " you are, you can host your own server (see the previous ",
                     "link) or simply get an account on e.g. ", 
                     e("a", {href: "https://5apps.com/storage/beta"}, "the one from 5apps"),
-                    ". Then click the orange thingy on the top-right to log in ",
+                    ". Then click the icon in the top-right corner to log in ",
                     "with your RemoteStorage-account. If you then visit this ",
                     "site from another device and also log in there, your tasks ",
                     "will appear there too."
