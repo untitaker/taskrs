@@ -31,6 +31,57 @@ window.remoteStorage.displayWidget();
         }
     });
 
+    var LoadingStub = React.createClass({
+        displayName: "LoadingStub",
+        render: function() {
+            return e("div", null, "loading...");
+        }
+    });
+
+    var Welcome = React.createClass({
+        displayName: "Welcome",
+        render: function() {
+            return e(
+                "div", null,
+                e(
+                    "h2", null,
+                    "Hello! It seems that you use Taskrs for the first time."
+                ),
+                e(
+                    "p", null,
+                    "Basically you're looking at a simple task lists ",
+                    "application. If you want to use it, tap the ",
+                    e("q", null, "Edit lists"),
+                    " button on your left, create a new list and start adding ",
+                    "tasks that come to your mind."
+                ),
+                e(
+                    "p", null,
+                    "By default your tasks are stored on the device you're ",
+                    "using and are never sent to a server. ",
+                    "However, if you want to keep your tasks in sync with ",
+                    "another device, you can also connect this application to a ",
+                    e("a", {href: "http://remotestorage.io/"}, "RemoteStorage"),
+                    "-server. Depending on how ",
+                    e("s", null, "paranoid "),
+                    e("i", null, "security-minded"),
+                    " you are, you can host your own server (see the previous ",
+                    "link) or simply get an account on e.g. ", 
+                    e("a", {href: "https://5apps.com/storage/beta"}, "the one from 5apps"),
+                    ". Then click the orange thingy on the top-right to log in ",
+                    "with your RemoteStorage-account. If you then visit this ",
+                    "site from another device and also log in there, your tasks ",
+                    "will appear there too."
+                ),
+                e(
+                    "p", null,
+                    "If anything is unclear, ",
+                    e("a", {href: "https://unterwaditzer.net/contact.html"}, "contact me!")
+                )
+            );
+        }
+    });
+
     var App = React.createClass({
         displayName: "App",
         getInitialState: function() {
@@ -38,8 +89,7 @@ window.remoteStorage.displayWidget();
         },
         loadLists: function() {
             vdirs.getLists().then(function(lists) {
-                this.setState({lists: lists, isLoading: false});
-                this.loadShownLists();
+                this.setState({lists: lists, isLoading: false}, this.loadShownLists);
             }.bind(this));
         },
         loadShownLists: function() {
@@ -88,33 +138,41 @@ window.remoteStorage.displayWidget();
                 ])
             );
 
-            var taskLists;
             if(this.state.isLoading) {
-                taskLists = e("div", null, "loading...");
-            } else {
-                taskLists = e(
-                    "ul",
-                    {
-                        id: "tasklists",
-                        className: "nav nav-pills nav-stacked" + (this.state.isEditing ? " editing" : "")
-                    },
-                    this.state.lists.map(function(tasklist) {
-                        return e(TaskListSelectorItem, {
-                            ref: "list_" + tasklist.path,
-                            onToggle: this.loadShownLists,
-                            tasklist: tasklist,
-                            showEditFunctions: this.state.isEditing,
-                            key: tasklist.path
-                        });
-                    }.bind(this)),
-                    (
-                        this.state.isEditing ?
-                            e("li", null, e(TaskListAdder, {listAdded: this.loadLists})) :
-                            null
-                    )
-                );
+                return e(LoadingStub);
             }
 
+            var taskListsSidebar = e(
+                "ul",
+                {
+                    id: "tasklists",
+                    className: "nav nav-pills nav-stacked" + (this.state.isEditing ? " editing" : "")
+                },
+                this.state.lists.map(function(tasklist) {
+                    return e(TaskListSelectorItem, {
+                        ref: "list_" + tasklist.path,
+                        onToggle: this.loadShownLists,
+                        tasklist: tasklist,
+                        showEditFunctions: this.state.isEditing,
+                        key: tasklist.path
+                    });
+                }.bind(this)),
+                (
+                    this.state.isEditing ?
+                        e("li", null, e(TaskListAdder, {listAdded: this.loadLists})) :
+                        null
+                )
+            );
+
+            var taskList;
+            if(this.state.lists.length == 0) {
+                taskList = e(Welcome);
+            } else {
+                taskList = e(TaskList, {
+                    ref: "tasklist",
+                    shownLists: this.state.shownLists
+                });
+            }
 
             return e(
                 "div", {className: "container-fluid"},
@@ -124,14 +182,11 @@ window.remoteStorage.displayWidget();
                         "div", {className: "col-md-4", id: "sidebar"},
                         e("h2", {className: "sr-only"}, "Task lists"),
                         e("p", null, editButton),
-                        taskLists
+                        taskListsSidebar
                     ),
                     e(
                         "div", {className: "col-md-8"},
-                        e(TaskList, {
-                            ref: "tasklist",
-                            shownLists: this.state.shownLists
-                        })
+                        taskList
                     )
                 )
             );
