@@ -1,5 +1,7 @@
 # Taskrs
 
+[![Build Status](https://travis-ci.org/untitaker/taskrs.svg)](https://travis-ci.org/untitaker/taskrs)
+
 A task list app for [remoteStorage](http://remotestorage.io/).
 
 The speciality about this one is that it stores its task in the iCalendar
