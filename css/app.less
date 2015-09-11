@@ -31,13 +31,12 @@
     outline: none !important;
 }
 
-#tasklists {
-    @media (min-width: @screen-md-min) {
-        .nav-stacked;
-    }
-    @media (max-width: @screen-md-min) {
-        > li {
-            margin-top: 2px;
+@media (max-width: @screen-md-min) {
+    #tasklists:not(.editing) > li {
+        float: left;
+        margin-top: 2px;
+        + li {
+            margin-left: 2px;
         }
     }
 }
