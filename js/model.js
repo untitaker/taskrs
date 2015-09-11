@@ -212,7 +212,7 @@ window.RemoteStorage.defineModule("vdir_calendars", function(privateClient) {
                                     rv.push(list);
                                 }
                             }
-                            for(var name in oldListCache) {
+                            for(name in oldListCache) {
                                 oldListCache[name].client.storage.caching.disable("");
                             }
                             resolve(rv);

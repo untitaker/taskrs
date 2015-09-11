@@ -25,7 +25,6 @@ window.remoteStorage.displayWidget();
             window.autosize(React.findDOMNode(this.refs.textarea));
         },
         render: function() {
-            var that = this;
             return e("textarea", Object.assign({}, this.props, {
                 ref: "textarea"
             }));
