@@ -1,6 +1,5 @@
 // vim: set ft=javascript:
 window.RemoteStorage.defineModule("vdir_calendars", function(privateClient) {
-    privateClient.cache("");
 
     var state = {
         listCache: {}
@@ -8,6 +7,7 @@ window.RemoteStorage.defineModule("vdir_calendars", function(privateClient) {
 
     function TaskList(client, path) {
         this.client = client.scope(path);
+        this.client.storage.caching.enable("");
         this.path = path;
         this._itemCache = {};
     }
@@ -208,8 +208,12 @@ window.RemoteStorage.defineModule("vdir_calendars", function(privateClient) {
                                 if(name.endsWith("/")) {
                                     list = oldListCache[name] || new TaskList(privateClient, name);
                                     state.listCache[name] = list;
+                                    delete oldListCache[name];
                                     rv.push(list);
                                 }
+                            }
+                            for(var name in oldListCache) {
+                                oldListCache[name].client.storage.caching.disable("");
                             }
                             resolve(rv);
                         },
