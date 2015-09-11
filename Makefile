@@ -1,4 +1,6 @@
-install: install-bower install-npm
+export PATH := ./node_modules/.bin/:$(PATH)
+
+install: install-npm install-bower
 
 install-bower:
 	bower install \
@@ -9,6 +11,9 @@ install-bower:
 		bootswatch \
 		moment \
 		autosize
+
+install-npm:
+	npm install bower less eslint
 
 build-js:
 	mkdir -p build/js
@@ -26,10 +31,7 @@ build-js:
 build-css:
 	mkdir -p build/css build/fonts
 	cp -R bower_components/bootstrap/dist/fonts/* build/fonts/
-	cat \
-		bower_components/bootswatch/flatly/bootstrap.css \
-		css/app.css \
-		> build/css/all.css
+	lessc css/app.less > build/css/all.css
 
 build-html:
 	cp -R site/{*,.htaccess} build/
