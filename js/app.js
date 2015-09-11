@@ -97,7 +97,7 @@ window.remoteStorage.displayWidget();
                     "ul",
                     {
                         id: "tasklists",
-                        className: "nav nav-pills nav-stacked"
+                        className: "nav nav-pills"
                     },
                     this.state.lists.map(function(tasklist) {
                         return e(TaskListSelectorItem, {

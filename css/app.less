@@ -4,7 +4,7 @@
 
 #layout {
     margin: 10px auto 0;
-    max-width: 750px;
+    max-width: @screen-md-min;
 }
 
 .task.disabled * {
@@ -29,4 +29,15 @@
 
 *:active, *:hover {
     outline: none !important;
+}
+
+#tasklists {
+    @media (min-width: @screen-md-min) {
+        .nav-stacked;
+    }
+    @media (max-width: @screen-md-min) {
+        > li {
+            margin-top: 2px;
+        }
+    }
 }
