@@ -1,0 +1,7 @@
+language: c
+
+install:
+    - make install
+
+script:
+    - make lint
