@@ -1,5 +1,13 @@
 // vim: set ft=javascript:
 window.RemoteStorage.defineModule("vdir_calendars", function(privateClient) {
+    var getDefaultMaxAge = function() {
+        var rs = window.remoteStorage;
+        if(rs.connected && rs.online) {
+            return 2 * rs.getSyncInterval();
+        } else {
+            return false;
+        }
+    };
 
     var state = {
         listCache: {}
@@ -14,7 +22,7 @@ window.RemoteStorage.defineModule("vdir_calendars", function(privateClient) {
 
     TaskList.prototype.listTasks = function() {
         return new Promise(function(resolve, reject) {
-            this.client.getListing("").then(function(listing) {
+            this.client.getListing("", getDefaultMaxAge()).then(function(listing) {
                 var oldItemCache = this._itemCache;
                 this._itemCache = {};
                 var rv = [];
@@ -33,7 +41,7 @@ window.RemoteStorage.defineModule("vdir_calendars", function(privateClient) {
 
     TaskList.prototype.getColor = function() {
         var that = this;
-        return this.client.getFile("color").then(function(file) {
+        return this.client.getFile("color", getDefaultMaxAge()).then(function(file) {
             return (file.data || "").trim();
         }).catch(function(e) {
             console.log("Error while fetching color", that, e);
@@ -55,7 +63,7 @@ window.RemoteStorage.defineModule("vdir_calendars", function(privateClient) {
             fallback = fallback.substring(0, fallback.length - 1);
         }
 
-        return this.client.getFile("displayname").then(function(file) {
+        return this.client.getFile("displayname", getDefaultMaxAge()).then(function(file) {
             return file.data || fallback;
         }).catch(function(e) {
             console.log("Error while fetching displaynam", that, e);
@@ -129,7 +137,7 @@ window.RemoteStorage.defineModule("vdir_calendars", function(privateClient) {
         }
 
         return new Promise(function(resolve, reject) {
-            that.tasklist.client.getFile(that.name).then(function(file) {
+            that.tasklist.client.getFile(that.name, getDefaultMaxAge()).then(function(file) {
                 if(!file.data) {
                     return reject(Error("Failed to fetch file."));
                 } else {
@@ -198,7 +206,7 @@ window.RemoteStorage.defineModule("vdir_calendars", function(privateClient) {
         exports: {
             getLists: function() {
                 return new Promise(function(resolve, reject) {
-                    privateClient.getListing("").then(
+                    privateClient.getListing("", getDefaultMaxAge()).then(
                         function(listing) {
                             var oldListCache = state.listCache;
                             state.listCache = {};
