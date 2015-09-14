@@ -75,6 +75,17 @@ window.remoteStorage.displayWidget();
                 ),
                 e(
                     "p", null,
+                    e(
+                        "strong", null,
+                        "Please note that this is still a work-in-progress. The ",
+                        "app is currently very slow, and it might even loose ",
+                        "your data (it's Javascript after all). Please do make ",
+                        "some form of backup, or simply don't put sensitive ",
+                        "data into Taskrs."
+                    )
+                ),
+                e(
+                    "p", null,
                     "If anything is unclear, ",
                     e("a", {href: "https://unterwaditzer.net/contact.html"}, "contact me!")
                 )
