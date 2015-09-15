@@ -96,7 +96,10 @@ window.remoteStorage.displayWidget();
     var App = React.createClass({
         displayName: "App",
         getInitialState: function() {
-            return {isLoading: true, isEditing: false, lists: [], shownLists: []};
+            return {
+                isLoading: true, isEditing: false, lists: [],
+                shownLists: [], showCompletedTasks: false
+            };
         },
         loadLists: function() {
             vdirs.getLists().then(function(lists) {
@@ -181,9 +184,27 @@ window.remoteStorage.displayWidget();
             } else {
                 taskList = e(TaskList, {
                     ref: "tasklist",
-                    shownLists: this.state.shownLists
+                    shownLists: this.state.shownLists,
+                    showCompletedTasks: this.state.showCompletedTasks
                 });
             }
+
+            var toggleCompletedTasksButton = e(
+                "label", null,
+                e(
+                    "input",
+                    {
+                        type: "checkbox",
+                        checked: this.state.showCompletedTasks,
+                        onChange: function(e) {
+                            that.setState({
+                                showCompletedTasks: !that.state.showCompletedTasks
+                            });
+                        }
+                    }
+                ),
+                "Show completed tasks"
+            );
 
             return e(
                 "div", {className: "container-fluid"},
@@ -193,7 +214,8 @@ window.remoteStorage.displayWidget();
                         "div", {className: "col-md-4", id: "sidebar"},
                         e("h2", {className: "sr-only"}, "Task lists"),
                         e("p", null, editButton),
-                        taskListsSidebar
+                        taskListsSidebar,
+                        e("p", null, toggleCompletedTasksButton)
                     ),
                     e(
                         "div", {className: "col-md-8"},
@@ -432,10 +454,10 @@ window.remoteStorage.displayWidget();
         getInitialState: function() {
             return {
                 shownTasks: [],
-                showTaskAdder: false
+                showTaskAdder: false,
             };
         },
-        loadTasks: function(lists) {
+        loadTasks: function(lists, showCompletedTasks) {
             var that = this;
             console.log("Lists: ", lists.map(function(list) {return list.path;}));
 
@@ -459,6 +481,12 @@ window.remoteStorage.displayWidget();
                             // not a vtodo item, otherwise probably fine
                             return false;
                         }
+
+                        if(!showCompletedTasks && task.isCompleted) {
+                            console.log("Completed", task);
+                            return false;
+                        }
+
                         return true;
                     });
                     tasks = utils.sortTaskList(tasks);
@@ -499,12 +527,17 @@ window.remoteStorage.displayWidget();
             });
         },
         componentDidMount: function() {
-            this.loadTasks(this.props.shownLists);
+            this.loadTasks(this.props.shownLists,
+                           this.props.showCompletedTasks);
         },
         componentWillReceiveProps: function(nextProps) {
-            if(nextProps.shownLists != this.props.shownLists) {
+            if(
+              nextProps.shownLists != this.props.shownLists ||
+              nextProps.showCompletedTasks != this.props.showCompletedTasks
+            ) {
                 console.log("TaskList: Lists updated");
-                this.loadTasks(nextProps.shownLists);
+                this.loadTasks(nextProps.shownLists,
+                               nextProps.showCompletedTasks);
             }
         },
         render: function() {
