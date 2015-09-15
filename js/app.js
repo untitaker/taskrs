@@ -179,7 +179,7 @@ window.remoteStorage.displayWidget();
             );
 
             var taskList;
-            if(this.state.lists.length == 0) {
+            if(this.state.lists.length === 0) {
                 taskList = e(Welcome);
             } else {
                 taskList = e(TaskList, {
@@ -196,7 +196,7 @@ window.remoteStorage.displayWidget();
                     {
                         type: "checkbox",
                         checked: this.state.showCompletedTasks,
-                        onChange: function(e) {
+                        onChange: function() {
                             that.setState({
                                 showCompletedTasks: !that.state.showCompletedTasks
                             });
@@ -454,7 +454,7 @@ window.remoteStorage.displayWidget();
         getInitialState: function() {
             return {
                 shownTasks: [],
-                showTaskAdder: false,
+                showTaskAdder: false
             };
         },
         loadTasks: function(lists, showCompletedTasks) {
