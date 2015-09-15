@@ -203,7 +203,7 @@ window.remoteStorage.displayWidget();
                         }
                     }
                 ),
-                "Show completed tasks"
+                " Show completed tasks"
             );
 
             return e(
@@ -214,7 +214,7 @@ window.remoteStorage.displayWidget();
                         "div", {className: "col-md-4", id: "sidebar"},
                         e("h2", {className: "sr-only"}, "Task lists"),
                         e("p", null, editButton),
-                        taskListsSidebar,
+                        e("p", null, taskListsSidebar),
                         e("p", null, toggleCompletedTasksButton)
                     ),
                     e(
