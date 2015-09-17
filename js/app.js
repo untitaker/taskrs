@@ -595,7 +595,7 @@ window.remoteStorage.displayWidget();
                 this.setState({labelHint: "New Task in " + name});
             }.bind(this));
 
-            return {isAdding: false, labelHint: "New Task"};
+            return {isAdding: null, labelHint: "New Task"};
         },
         startAdd: function() {
             this.setState({isAdding: this.props.tasklist.newTask()});
