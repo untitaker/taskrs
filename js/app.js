@@ -137,10 +137,11 @@ window.remoteStorage.displayWidget();
         render: function() {
             var that = this;
 
-            var editButton = e(
-                "button",
+            var editButton = e("small", null, e(
+                "a",
                 {
-                    className: "btn btn-sm btn-default" + (that.state.isEditing ? " active" : ""),
+                    href: "#",
+                    className: (that.state.isEditing ? " active" : ""),
                     onClick: function(e) {
                         e.preventDefault();
                         that.setState({isEditing: !that.state.isEditing});
@@ -153,7 +154,7 @@ window.remoteStorage.displayWidget();
                     e("span", {className: "glyphicon glyphicon-pencil"}),
                     " Edit lists"
                 ])
-            );
+            ));
 
             if(this.state.isLoading) {
                 return e(LoadingStub);
@@ -193,20 +194,23 @@ window.remoteStorage.displayWidget();
             }
 
             var toggleCompletedTasksButton = e(
-                "label", null,
+                "small", null,
                 e(
-                    "input",
-                    {
-                        type: "checkbox",
-                        checked: this.state.showCompletedTasks,
-                        onChange: function() {
-                            that.setState({
-                                showCompletedTasks: !that.state.showCompletedTasks
-                            });
+                    "label", null,
+                    e(
+                        "input",
+                        {
+                            type: "checkbox",
+                            checked: this.state.showCompletedTasks,
+                            onChange: function() {
+                                that.setState({
+                                    showCompletedTasks: !that.state.showCompletedTasks
+                                });
+                            }
                         }
-                    }
-                ),
-                " Show completed tasks"
+                    ),
+                    " Show completed tasks"
+                )
             );
 
             return e(
