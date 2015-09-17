@@ -598,15 +598,15 @@ window.remoteStorage.displayWidget();
             return {isAdding: false, labelHint: "New Task"};
         },
         startAdd: function() {
-            this.setState({isAdding: true});
+            this.setState({isAdding: this.props.tasklist.newTask()});
         },
         stopAdd: function() {
-            this.setState({isAdding: false});
+            this.setState({isAdding: null});
         },
         render: function() {
             var inner;
-            if(this.state.isAdding) {
-                var newTask = this.props.tasklist.newTask();
+            if(this.state.isAdding !== null) {
+                var newTask = this.state.isAdding;
                 inner = e(TaskEditor, {task: newTask, editFinished: this.stopAdd});
             } else {
                 inner = e(
