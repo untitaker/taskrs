@@ -21,12 +21,15 @@ window.remoteStorage.displayWidget();
 
     var Textarea = React.createClass({
         displayName: "Textarea",
-        componentDidMount: function() {
-            window.autosize(React.findDOMNode(this.refs.textarea));
-        },
         render: function() {
             return e("textarea", Object.assign({}, this.props, {
-                ref: "textarea"
+                ref: function(elem) {
+                    if(elem !== null) {
+                        var elem2 = React.findDOMNode(elem);
+                        window.autosize(elem2);
+                        window.autosize.update(elem2);
+                    }
+                }
             }));
         }
     });
