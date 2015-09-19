@@ -31,7 +31,7 @@ build-js:
 build-css:
 	mkdir -p build/css build/fonts
 	cp -R bower_components/bootstrap/dist/fonts/* build/fonts/
-	lessc css/app.less > build/css/all.css
+	lessc css/app.less | grep -v removethisline > build/css/all.css
 
 build-html:
 	cp -R site/{*,.htaccess} build/
