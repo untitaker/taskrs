@@ -135,6 +135,7 @@ window.RemoteStorage.defineModule("vdir_calendars", function(privateClient) {
         if(this._ensuredContent) {
             return new Promise(function(a) { a(that); });
         }
+        that._ensuredContent = true;
 
         return new Promise(function(resolve, reject) {
             that.tasklist.client.getFile(that.name, getDefaultMaxAge()).then(function(file) {
@@ -143,7 +144,6 @@ window.RemoteStorage.defineModule("vdir_calendars", function(privateClient) {
                 } else {
                     that.jcal = window.ICAL.parse(file.data);
                     that.parseJcal();
-                    that._ensuredContent = true;
                     return resolve(that);
                 }
             }).catch(reject);
