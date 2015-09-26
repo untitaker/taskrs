@@ -12,9 +12,12 @@
     max-width: @screen-md-min;
 }
 
-.task.disabled * {
-    color: #333;
-    text-decoration: line-through;
+.with-tasklist-border {
+    border-left: 3px solid;
+}
+
+#tasklists a {
+    .with-tasklist-border;
 }
 
 .rs-bubble.rs-hidden {
@@ -24,8 +27,43 @@
     filter: grayscale(100%);
 }
 
-.task, #tasklists a {
-    border-left: 3px solid;
+.task {
+    .list-group-item;
+    .with-tasklist-border;
+    .clearfix;
+    padding: 0;
+
+    .task-inner {
+        display: block;
+        padding: 10px 15px;
+        height: 40px;
+    }
+
+    .task-checkbox {
+        float: left;
+        .task-inner;
+    }
+
+    .task-rest {
+        .task-inner;
+    }
+
+    &:hover {
+        .task-rest {
+            text-decoration: none;
+        }
+    }
+}
+
+.task.disabled {
+    * {
+        color: #333;
+        text-decoration: line-through;
+    }
+
+    .task-rest {
+        background-color: none;
+    }
 }
 
 #sidebar {

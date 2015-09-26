@@ -892,7 +892,7 @@ window.remoteStorage.displayWidget();
                     that.forceUpdate();
                 };
                 var className = (
-                    "task list-group-item" + (task.isCompleted ? " disabled" : "")
+                    "task" + (task.isCompleted ? " disabled" : "")
                 );
 
                 inner = e(
@@ -901,25 +901,28 @@ window.remoteStorage.displayWidget();
                         style: {borderLeftColor: this.state.tasklistColor}
                     },
                     e(
-                        "input",
-                        {
-                            type: "checkbox",
-                            checked: task.isCompleted,
-                            onChange: toggleCompleted
-                        }
+                        "div", {className: "task-checkbox"},
+                        e(
+                            "input",
+                            {
+                                type: "checkbox",
+                                checked: task.isCompleted,
+                                onChange: toggleCompleted
+                            }
+                        )
                     ),
-                    " ",
                     e(
                         "a",
                         {
                             href: "#",
                             onClick: editTask,
-                            title: "Edit task"
+                            title: "Edit task",
+                            className: "task-rest"
                         },
-                        task.summary
-                    ),
-                    " ",
-                    e(TaskDueLabel, {task: task})
+                        task.summary,
+                        " ",
+                        e(TaskDueLabel, {task: task})
+                    )
                 );
             }
             return inner;
