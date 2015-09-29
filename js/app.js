@@ -878,9 +878,7 @@ window.remoteStorage.displayWidget();
                 var editFinished = function() {
                     that.setState({mode: "collapsed"});
                 };
-                var inner = e("li", {className: "list-group-item"},
-                              e(TaskEditor, {task: task, editFinished: editFinished}));
-                return inner;
+                return e(TaskEditor, {task: task, editFinished: editFinished});
             },
             collapsed: function() {
                 var task = this.props.task;
@@ -890,48 +888,63 @@ window.remoteStorage.displayWidget();
                     e.preventDefault();
                     that.setState({mode: "editing"});
                 };
-                var toggleCompleted = function() {
-                    task.isCompleted = !task.isCompleted;
-                    task.saveTask();
-                    that.forceUpdate();
-                };
-                var className = (
-                    "task" + (task.isCompleted ? " disabled" : "")
-                );
-
-                return e(
-                    "li", {
-                        className: className,
-                        style: {borderLeftColor: this.state.tasklistColor}
-                    },
-                    e(
-                        "div", {className: "task-checkbox"},
-                        e(
-                            "input",
-                            {
-                                type: "checkbox",
-                                checked: task.isCompleted,
-                                onChange: toggleCompleted
-                            }
-                        )
-                    ),
-                    e(
-                        "a",
-                        {
-                            href: "#",
-                            onClick: editTask,
-                            title: "Edit task",
-                            className: "task-rest"
-                        },
-                        task.summary,
-                        " ",
-                        e(TaskDueLabel, {task: task})
-                    )
-                );
+                return e(TaskSingleLineRepr, {task: task, editTask: editTask});
             }
         },
         render: function() {
-            return this.modes[this.state.mode].bind(this)();
+            var task = this.props.task;
+            var inner = this.modes[this.state.mode].bind(this)();
+            var className = (
+                "task mode-" + this.state.mode + (task.isCompleted ? " disabled" : "")
+            );
+
+            return e(
+                "li", {
+                    className: className,
+                    style: {borderLeftColor: this.state.tasklistColor}
+                },
+                inner
+            );
+        }
+    });
+
+    var TaskSingleLineRepr = React.createClass({
+        displayName: "TaskSingleLineRepr",
+        render: function() {
+            var task = this.props.task;
+            var that = this;
+            var editTask = this.props.editTask;
+            var toggleCompleted = function() {
+                task.isCompleted = !task.isCompleted;
+                task.saveTask();
+                that.forceUpdate();
+            };
+            return e(
+                "div", null,
+                e(
+                    "div", {className: "task-checkbox"},
+                    e(
+                        "input",
+                        {
+                            type: "checkbox",
+                            checked: task.isCompleted,
+                            onChange: toggleCompleted
+                        }
+                    )
+                ),
+                e(
+                    "a",
+                    {
+                        href: "#",
+                        onClick: editTask,
+                        title: "Edit task",
+                        className: "task-rest"
+                    },
+                    task.summary,
+                    " ",
+                    e(TaskDueLabel, {task: task})
+                )
+            );
         }
     });
 
