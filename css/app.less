@@ -12,14 +12,6 @@
     max-width: @screen-md-min;
 }
 
-.with-tasklist-border {
-    border-left: 3px solid;
-}
-
-#tasklists a {
-    .with-tasklist-border;
-}
-
 .rs-bubble.rs-hidden {
     display: none !important;
 }
@@ -31,24 +23,45 @@
     .list-group-item;
     .clearfix;
 
-    &.mode-expanded, &.mode-collapsed {
-        padding: 0;
-        .with-tasklist-border;
+    .task-checkbox, .task-rest {
+        display: block;
     }
 
-    .task-inner {
-        display: block;
-        padding: 10px 15px;
-        height: 40px;
+    &.mode-collapsed {
+        padding: 0;
+
+        .task-checkbox, .task-rest {
+            padding: 10px 15px;
+        }
+    }
+
+    &.mode-expanded, &.mode-editing {
+        border-left: none;
+        border-right: none;
+        border-top: 1px solid;
+        border-bottom: 1px solid;
+    }
+
+    &.mode-expanded {
+        padding: 0;
+
+        .panel {
+            margin: 10px 0;
+        }
+
+        .task-checkbox, .task-rest {
+            padding-right: 15px;
+        }
     }
 
     .task-checkbox {
         float: left;
-        .task-inner;
     }
 
-    .task-rest {
-        .task-inner;
+    .task-edit-button {
+        .btn;
+        .btn-default;
+        .btn-xs;
     }
 
     &:hover {

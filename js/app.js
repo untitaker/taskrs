@@ -255,6 +255,12 @@ window.remoteStorage.displayWidget();
                 this.setState({mode: "normal"});
             }
         },
+        getStyle: function() {
+            return {
+                borderLeftColor: this.state.color,
+                borderLeft: "3px solid"
+            }
+        },
         modes: {
             editName: function() {
                 return e(TaskListEditor, {
@@ -265,7 +271,7 @@ window.remoteStorage.displayWidget();
                             this.refreshData();
                         }
                     }.bind(this),
-                    style: {borderLeftColor: this.state.color}
+                    style: this.getStyle()
                 });
             },
             showEditFunctions: function() {
@@ -277,7 +283,7 @@ window.remoteStorage.displayWidget();
                             e.preventDefault();
                             this.setState({mode: "editName"});
                         }.bind(this),
-                        style: {borderLeftColor: this.state.color}
+                        style: this.getStyle()
                     },
                     e("span", {className: "glyphicon glyphicon-pencil"}),
                     " ",
@@ -292,7 +298,7 @@ window.remoteStorage.displayWidget();
                             e.preventDefault();
                             this.setState({isActive: !this.isActive()}, this.props.onToggle);
                         }.bind(this),
-                        style: {borderLeftColor: this.state.color}
+                        style: this.getStyle()
                     },
                     this.state.displayName
                 );
@@ -870,25 +876,57 @@ window.remoteStorage.displayWidget();
                 that.setState({tasklistColor: color});
             });
         },
+        setMode: function(x) {
+            this.setState({mode: x});
+        },
         modes: {
             editing: function() {
                 var task = this.props.task;
                 var that = this;
 
-                var editFinished = function() {
-                    that.setState({mode: "collapsed"});
-                };
-                return e(TaskEditor, {task: task, editFinished: editFinished});
+                return e(TaskEditor, {
+                    task: task,
+                    editFinished: this.setMode.bind(this, "expanded")
+                });
             },
             collapsed: function() {
                 var task = this.props.task;
                 var that = this;
 
-                var editTask = function(e) {
-                    e.preventDefault();
-                    that.setState({mode: "editing"});
-                };
-                return e(TaskSingleLineRepr, {task: task, editTask: editTask});
+                return e(TaskSingleLineRepr, {
+                    task: task,
+                    toggleDetails: this.setMode.bind(this, "expanded")
+                });
+            },
+            expanded: function() {
+                var task = this.props.task;
+                var that = this;
+
+                return e(
+                    "div", {className: "panel panel-default"},
+                    e(
+                        "div", {className: "panel-heading"},
+                        e(
+                            "button", {
+                                className: "task-edit-button pull-right",
+                                onClick: function(e) {
+                                    e.preventDefault();
+                                    that.setMode("editing");
+                                }
+                            },
+                            "Edit"
+                        ),
+                        e(TaskSingleLineRepr, {
+                            task: task,
+                            className: "panel-title clearfix",
+                            toggleDetails: this.setMode.bind(this, "collapsed")
+                        })
+                    ),
+                    e(
+                        "div", {className: "panel-body"},
+                        e("div", {className: "task-description"}, task.description)
+                    )
+                );
             }
         },
         render: function() {
@@ -898,11 +936,14 @@ window.remoteStorage.displayWidget();
                 "task mode-" + this.state.mode + (task.isCompleted ? " disabled" : "")
             );
 
+            var style = null;
+            if(this.state.mode == "collapsed") {
+                style = {borderLeft: "3px solid " + this.state.tasklistColor};
+            }
+
             return e(
-                "li", {
-                    className: className,
-                    style: {borderLeftColor: this.state.tasklistColor}
-                },
+                "li",
+                {className: className, style: style},
                 inner
             );
         }
@@ -913,14 +954,13 @@ window.remoteStorage.displayWidget();
         render: function() {
             var task = this.props.task;
             var that = this;
-            var editTask = this.props.editTask;
             var toggleCompleted = function() {
                 task.isCompleted = !task.isCompleted;
                 task.saveTask();
                 that.forceUpdate();
             };
             return e(
-                "div", null,
+                "div", this.props,
                 e(
                     "div", {className: "task-checkbox"},
                     e(
@@ -936,8 +976,10 @@ window.remoteStorage.displayWidget();
                     "a",
                     {
                         href: "#",
-                        onClick: editTask,
-                        title: "Edit task",
+                        onClick: function(e) {
+                            e.preventDefault();
+                            that.props.toggleDetails();
+                        },
                         className: "task-rest"
                     },
                     task.summary,
