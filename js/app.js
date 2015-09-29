@@ -261,7 +261,7 @@ window.remoteStorage.displayWidget();
             return {
                 borderLeftColor: this.state.color,
                 borderLeft: "3px solid"
-            }
+            };
         },
         modes: {
             editName: function() {
@@ -884,7 +884,6 @@ window.remoteStorage.displayWidget();
         modes: {
             editing: function() {
                 var task = this.props.task;
-                var that = this;
 
                 return e(TaskEditor, {
                     task: task,
@@ -893,7 +892,6 @@ window.remoteStorage.displayWidget();
             },
             collapsed: function() {
                 var task = this.props.task;
-                var that = this;
 
                 return e(TaskSingleLineRepr, {
                     task: task,
