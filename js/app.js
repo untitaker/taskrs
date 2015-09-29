@@ -950,7 +950,7 @@ window.remoteStorage.displayWidget();
             var task = this.props.task;
             var inner = this.modes[this.state.mode].bind(this)();
             var className = (
-                "task mode-" + this.state.mode + (task.isCompleted ? " disabled" : "")
+                "task mode-" + this.state.mode + (task.isCompleted ? " done" : "")
             );
 
             var style = null;
@@ -997,7 +997,7 @@ window.remoteStorage.displayWidget();
                             e.preventDefault();
                             that.props.toggleDetails();
                         },
-                        className: "task-rest"
+                        className: "task-summary"
                     },
                     task.summary,
                     " ",

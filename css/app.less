@@ -23,14 +23,14 @@
     .list-group-item;
     .clearfix;
 
-    .task-checkbox, .task-rest {
+    .task-checkbox, .task-summary {
         display: block;
     }
 
     &.mode-collapsed {
         padding: 0;
 
-        .task-checkbox, .task-rest {
+        .task-checkbox, .task-summary {
             padding: 10px 15px;
         }
     }
@@ -43,13 +43,11 @@
     }
 
     &.mode-expanded {
-        padding: 0;
-
         .panel {
-            margin: 10px 0;
+            margin: 0;
         }
 
-        .task-checkbox, .task-rest {
+        .task-checkbox, .task-summary {
             padding-right: 15px;
         }
     }
@@ -65,20 +63,16 @@
     }
 
     &:hover {
-        .task-rest {
+        .task-summary {
             text-decoration: none;
         }
     }
-}
 
-.task.disabled {
-    * {
-        color: #333;
-        text-decoration: line-through;
-    }
-
-    .task-rest {
-        background-color: none;
+    &.done {
+        .task-summary {
+            color: #333;
+            text-decoration: line-through;
+        }
     }
 }
 
