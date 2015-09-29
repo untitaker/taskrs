@@ -862,7 +862,7 @@ window.remoteStorage.displayWidget();
     var Task = React.createClass({
         displayName: "Task",
         getInitialState: function() {
-            return {isEditing: false, tasklistColor: null};
+            return {tasklistColor: null, mode: "collapsed"};
         },
         componentWillMount: function() {
             var that = this;
@@ -870,21 +870,25 @@ window.remoteStorage.displayWidget();
                 that.setState({tasklistColor: color});
             });
         },
-        render: function() {
-            var inner;
-            var that = this;
-            var task = this.props.task;
+        modes: {
+            editing: function() {
+                var task = this.props.task;
+                var that = this;
 
-            if(this.state.isEditing) {
                 var editFinished = function() {
-                    that.setState({isEditing: false});
+                    that.setState({mode: "collapsed"});
                 };
-                inner = e("li", {className: "list-group-item"},
-                          e(TaskEditor, {task: task, editFinished: editFinished}));
-            } else {
+                var inner = e("li", {className: "list-group-item"},
+                              e(TaskEditor, {task: task, editFinished: editFinished}));
+                return inner;
+            },
+            collapsed: function() {
+                var task = this.props.task;
+                var that = this;
+
                 var editTask = function(e) {
                     e.preventDefault();
-                    that.setState({isEditing: true});
+                    that.setState({mode: "editing"});
                 };
                 var toggleCompleted = function() {
                     task.isCompleted = !task.isCompleted;
@@ -895,7 +899,7 @@ window.remoteStorage.displayWidget();
                     "task" + (task.isCompleted ? " disabled" : "")
                 );
 
-                inner = e(
+                return e(
                     "li", {
                         className: className,
                         style: {borderLeftColor: this.state.tasklistColor}
@@ -925,7 +929,9 @@ window.remoteStorage.displayWidget();
                     )
                 );
             }
-            return inner;
+        },
+        render: function() {
+            return this.modes[this.state.mode].bind(this)();
         }
     });
 
