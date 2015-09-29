@@ -19,6 +19,7 @@ window.remoteStorage.displayWidget();
     var moment = window.moment;
     var ICAL = window.ICAL;
     var commonmark = window.commonmark;
+    var Autolinker = window.Autolinker;
 
     var Textarea = React.createClass({
         displayName: "Textarea",
@@ -908,7 +909,11 @@ window.remoteStorage.displayWidget();
                     var reader = new commonmark.Parser();
                     var writer = new commonmark.HtmlRenderer({safe: true});
                     writer.softbreak = "<br />";
-                    markdownDescription = writer.render(reader.parse(task.description));
+                    markdownDescription = Autolinker.link(
+                        writer.render(
+                            reader.parse(task.description)
+                        )
+                    );
                 }
 
                 return e(

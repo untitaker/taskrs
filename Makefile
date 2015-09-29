@@ -10,7 +10,8 @@ install-bower:
 		bootstrap \
 		bootswatch \
 		moment \
-		autosize
+		autosize \
+		Autolinker.js
 
 install-npm:
 	npm install bower less eslint commonmark
@@ -24,6 +25,7 @@ build-js:
 		bower_components/moment/moment.js \
 		bower_components/autosize/dist/autosize.js \
 		node_modules/commonmark/dist/commonmark.min.js \
+		bower_components/Autolinker.js/dist/Autolinker.js \
 		js/utils.js \
 		js/model.js \
 		js/app.js \
