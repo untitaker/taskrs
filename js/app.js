@@ -258,10 +258,7 @@ window.remoteStorage.displayWidget();
             }
         },
         getStyle: function() {
-            return {
-                borderLeftColor: this.state.color,
-                borderLeft: "3px solid"
-            };
+            return {borderLeft: "3px solid " + this.state.color};
         },
         modes: {
             editName: function() {
