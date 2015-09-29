@@ -18,6 +18,7 @@ window.remoteStorage.displayWidget();
     var utils = window.taskrs.utils;
     var moment = window.moment;
     var ICAL = window.ICAL;
+    var commonmark = window.commonmark;
 
     var Textarea = React.createClass({
         displayName: "Textarea",
@@ -902,6 +903,14 @@ window.remoteStorage.displayWidget();
                 var task = this.props.task;
                 var that = this;
 
+                var markdownDescription = "";
+                if(task.description) {
+                    var reader = new commonmark.Parser();
+                    var writer = new commonmark.HtmlRenderer({safe: true});
+                    writer.softbreak = "<br />";
+                    markdownDescription = writer.render(reader.parse(task.description));
+                }
+
                 return e(
                     "div", {className: "panel panel-default"},
                     e(
@@ -924,7 +933,12 @@ window.remoteStorage.displayWidget();
                     ),
                     e(
                         "div", {className: "panel-body"},
-                        e("div", {className: "task-description"}, task.description)
+                        e("div", {
+                            className: "task-description",
+                            dangerouslySetInnerHTML: {
+                                __html: markdownDescription
+                            }
+                        })
                     )
                 );
             }

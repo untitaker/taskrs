@@ -13,7 +13,7 @@ install-bower:
 		autosize
 
 install-npm:
-	npm install bower less eslint
+	npm install bower less eslint commonmark
 
 build-js:
 	mkdir -p build/js
@@ -23,6 +23,7 @@ build-js:
 		bower_components/react/react.js \
 		bower_components/moment/moment.js \
 		bower_components/autosize/dist/autosize.js \
+		node_modules/commonmark/dist/commonmark.min.js \
 		js/utils.js \
 		js/model.js \
 		js/app.js \
