@@ -67,7 +67,7 @@ deploy:
 	rsync -av --delete --chmod=755 ./build/ untispace:~/virtual/unterwaditzer.net/taskrs/
 
 clean:
-	rm -r build/
+	rm -r build/ bower_components/ node_modules/
 
 # We don't have to provide all phony targets here since only build exists in the FS.
 .PHONY: build
