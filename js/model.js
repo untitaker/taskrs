@@ -41,7 +41,7 @@ window.RemoteStorage.defineModule("vdir_calendars", function(privateClient) {
 
     TaskList.prototype.setColor = function(val) {
         // FIXME: validation
-        return this.client.storeFile("text/plain", "color", val);
+        return this.client.storeFile("text/plain", "color", val || "#000000");
     };
 
     // These two are separate functions because one of them returns a promise
