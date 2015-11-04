@@ -64,7 +64,14 @@ autobuild:
 	done
 
 deploy:
-	rsync -av --delete --chmod=755 ./build/ untispace:~/virtual/unterwaditzer.net/taskrs/
+	set -ex; \
+		cd build/; \
+		rm -rf .git; \
+		git init; \
+		git remote add 5apps git@5apps.com:untitaker_taskrs.git; \
+		git add -A; \
+		git commit -am "$$(date)"; \
+		git push -f 5apps master
 
 clean:
 	rm -r build/ bower_components/ node_modules/
