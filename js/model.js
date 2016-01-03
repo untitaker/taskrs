@@ -96,11 +96,7 @@ window.RemoteStorage.defineModule("vdir_calendars", function(privateClient) {
         this.vcalendar = null;
         this.vtodo = null;
         this._ensuredContent = false;
-
         console.log("new TaskItem", this);
-        // FIXME: Why does remoteStorage.js call event handlers with this ==
-        // window?
-        this.tasklist.client.on("change", this._handleChange.bind(this));
     }
 
     TaskItem.prototype._handleChange = function(e) {
@@ -135,6 +131,11 @@ window.RemoteStorage.defineModule("vdir_calendars", function(privateClient) {
                 } else {
                     that.jcal = window.ICAL.parse(file.data);
                     that.parseJcal();
+                    if(this.vtodo) {
+                        // FIXME: Why does remoteStorage.js call event handlers with this ==
+                        // window?
+                        this.tasklist.client.on("change", this._handleChange.bind(this));
+                    }
                     return resolve(that);
                 }
             }).catch(reject);
