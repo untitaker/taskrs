@@ -19,7 +19,7 @@ install-npm:
 build-js:
 	mkdir -p build/js
 	cat \
-		bower_components/remotestorage/remotestorage.js \
+		bower_components/remotestorage/release/stable/remotestorage.js \
 		bower_components/ical.js/build/ical.js \
 		bower_components/react/react.js \
 		bower_components/moment/moment.js \
