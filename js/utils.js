@@ -1,7 +1,6 @@
 // vim: set ft=javascript:
 
-window.taskrs = {};
-window.taskrs.utils = {
+module.exports = {
     generateUUID: function(){
         var d = new Date().getTime();
         var uuid = "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function(c) {

@@ -1,5 +1,6 @@
 // vim: set ft=javascript:
-window.RemoteStorage.defineModule("vdir_calendars", function(privateClient) {
+
+module.exports = function(privateClient) {
     var state = {
         listCache: {}
     };
@@ -227,4 +228,4 @@ window.RemoteStorage.defineModule("vdir_calendars", function(privateClient) {
             }
         }
     };
-});
+};

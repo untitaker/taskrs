@@ -1,25 +1,34 @@
 // vim: set ft=javascript:
+require('../lib/remotestorage.amd.js');
 
-window.RemoteStorage.config.logging = true;
-window.RemoteStorage.config.changeEvents = {
-    local: true,
-    window: true,
-    remote: true,
-    conflict: true
-};
+window.remoteStorage = new RemoteStorage({
+    logging: true,
+    changeEvents: {
+        local: true,
+        window: true,
+        remote: true,
+        conflict: true
+    }
+});
 
-window.remoteStorage.access.claim("vdir_calendars", "rw");
-window.remoteStorage.displayWidget();
+RemoteStorage.defineModule("vdir_calendars", require('./model.js'));
 
-(function() {
-    var vdirs = window.remoteStorage.vdir_calendars;
-    var React = window.React;
-    var e = React.createElement;
-    var utils = window.taskrs.utils;
-    var moment = window.moment;
-    var ICAL = window.ICAL;
-    var commonmark = window.commonmark;
-    var Autolinker = window.Autolinker;
+var React = require('react');
+var ReactDOM = require('react-dom');
+var e = React.createElement;
+var utils = require('./utils.js');
+var moment = require('moment');
+var ICAL = require('ical.js');
+var marked = require('marked');
+var Autolinker = require('autolinker');
+var autosize = require('autosize');
+
+
+remoteStorage.access.claim("vdir_calendars", "rw");
+remoteStorage.displayWidget();
+
+remoteStorage.on('ready', function() {
+    var vdirs = remoteStorage.vdir_calendars;
 
     var Textarea = React.createClass({
         displayName: "Textarea",
@@ -28,8 +37,8 @@ window.remoteStorage.displayWidget();
                 ref: function(elem) {
                     if(elem !== null) {
                         var elem2 = React.findDOMNode(elem);
-                        window.autosize(elem2);
-                        window.autosize.update(elem2);
+                        autosize(elem2);
+                        autosize.update(elem2);
                     }
                 }
             }));
@@ -901,14 +910,7 @@ window.remoteStorage.displayWidget();
 
                 var markdownDescription = "";
                 if(task.description) {
-                    var reader = new commonmark.Parser();
-                    var writer = new commonmark.HtmlRenderer({safe: true});
-                    writer.softbreak = "<br />";
-                    markdownDescription = Autolinker.link(
-                        writer.render(
-                            reader.parse(task.description)
-                        )
-                    );
+                    markdownDescription = Autolinker.link(marked(task.description));
                 }
 
                 return e(
@@ -1004,5 +1006,5 @@ window.remoteStorage.displayWidget();
         }
     });
 
-    React.render(e(App), document.getElementById("layout"));
-})();
+    ReactDOM.render(e(App), document.getElementById("layout"));
+});

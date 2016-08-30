@@ -4,32 +4,15 @@ install: install-npm install-bower
 
 install-bower:
 	bower install \
-		ical.js \
-		react \
-		remotestorage \
 		bootstrap \
-		bootswatch \
-		moment \
-		autosize \
-		Autolinker.js
+		bootswatch
 
 install-npm:
-	npm install bower less eslint commonmark
+	npm install
 
 build-js:
 	mkdir -p build/js
-	cat \
-		bower_components/remotestorage/release/stable/remotestorage.js \
-		bower_components/ical.js/build/ical.js \
-		bower_components/react/react.js \
-		bower_components/moment/moment.js \
-		bower_components/autosize/dist/autosize.js \
-		node_modules/commonmark/dist/commonmark.min.js \
-		bower_components/Autolinker.js/dist/Autolinker.js \
-		js/utils.js \
-		js/model.js \
-		js/app.js \
-		> build/js/all.js
+	webpack js/app.js build/js/all.js
 
 build-css:
 	mkdir -p build/css build/fonts
@@ -75,6 +58,9 @@ deploy:
 
 clean:
 	rm -r build/ bower_components/ node_modules/
+
+sh:
+	$$SHELL
 
 # We don't have to provide all phony targets here since only build exists in the FS.
 .PHONY: build
