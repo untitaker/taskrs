@@ -1,5 +1,7 @@
 // vim: set ft=javascript:
 
+/*global module*/
+
 module.exports = {
     generateUUID: function(){
         var d = new Date().getTime();

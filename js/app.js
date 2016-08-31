@@ -1,7 +1,10 @@
 // vim: set ft=javascript:
-require('../lib/remotestorage.amd.js');
 
-window.remoteStorage = new RemoteStorage({
+/* global require */
+
+require("../lib/remotestorage.amd.js");
+
+window.remoteStorage = new window.RemoteStorage({
     logging: true,
     changeEvents: {
         local: true,
@@ -11,24 +14,23 @@ window.remoteStorage = new RemoteStorage({
     }
 });
 
-RemoteStorage.defineModule("vdir_calendars", require('./model.js'));
+window.RemoteStorage.defineModule("vdir_calendars", require("./model.js"));
 
-var React = require('react');
-var ReactDOM = require('react-dom');
+var React = require("react");
+var ReactDOM = require("react-dom");
 var e = React.createElement;
-var utils = require('./utils.js');
-var moment = require('moment');
-var ICAL = require('ical.js');
-var marked = require('marked');
-var Autolinker = require('autolinker');
-var autosize = require('autosize');
+var utils = require("./utils.js");
+var moment = require("moment");
+var ICAL = require("ical.js");
+var marked = require("marked");
+var Autolinker = require("autolinker");
+var autosize = require("autosize");
 
+window.remoteStorage.access.claim("vdir_calendars", "rw");
+window.remoteStorage.displayWidget();
 
-remoteStorage.access.claim("vdir_calendars", "rw");
-remoteStorage.displayWidget();
-
-remoteStorage.on('ready', function() {
-    var vdirs = remoteStorage.vdir_calendars;
+window.remoteStorage.on("ready", function() {
+    var vdirs = window.remoteStorage.vdir_calendars;
 
     var Textarea = React.createClass({
         displayName: "Textarea",

@@ -1,5 +1,7 @@
 // vim: set ft=javascript:
 
+/*global module*/
+
 module.exports = function(privateClient) {
     var state = {
         listCache: {}
