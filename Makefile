@@ -20,6 +20,7 @@ build-css:
 	lessc css/app.less | grep -v removethisline > build/css/all.css
 
 build-html:
+	mkdir build
 	cp -R site/{*,.htaccess} build/
 
 build: build-js build-css build-html
