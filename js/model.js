@@ -3,6 +3,7 @@
 /*global module*/
 
 module.exports = function(privateClient) {
+    var utils = require("./utils.js");
     var state = {
         listCache: {}
     };
@@ -70,7 +71,7 @@ module.exports = function(privateClient) {
     };
 
     TaskList.prototype.newTask = function() {
-        var uid = window.taskrs.utils.generateUUID();
+        var uid = utils.generateUUID();
         var rv = new TaskItem(this, uid + ".ics");
         rv.jcal = [
             "vcalendar",
@@ -226,7 +227,7 @@ module.exports = function(privateClient) {
                 });
             },
             newList: function() {
-                return new TaskList(privateClient, window.taskrs.utils.generateUUID() + "/");
+                return new TaskList(privateClient, utils.generateUUID() + "/");
             }
         }
     };

@@ -38,7 +38,7 @@ window.remoteStorage.on("ready", function() {
             return e("textarea", Object.assign({}, this.props, {
                 ref: function(elem) {
                     if(elem !== null) {
-                        var elem2 = React.findDOMNode(elem);
+                        var elem2 = ReactDOM.findDOMNode(elem);
                         autosize(elem2);
                         autosize.update(elem2);
                     }
@@ -391,7 +391,7 @@ window.remoteStorage.on("ready", function() {
         },
         componentDidMount: function() {
             // Focus only once.
-            React.findDOMNode(this.refs.displayname).focus();
+            ReactDOM.findDOMNode(this.refs.displayname).focus();
         },
         render: function() {
             var that = this;
@@ -650,7 +650,7 @@ window.remoteStorage.on("ready", function() {
         },
         componentDidMount: function() {
             this.stateFromTask(this.props.task);
-            React.findDOMNode(this.refs.summary).focus();
+            ReactDOM.findDOMNode(this.refs.summary).focus();
         },
         componentWillReceiveProps: function(newProps) {
             // Task gets a new jcal attribute when it is refetched
@@ -740,6 +740,8 @@ window.remoteStorage.on("ready", function() {
                             className: "form-control",
                             placeholder: "Summary",
                             ref: "summary",
+                            pattern: ".{1,}",
+                            required: true,
                             value: this.state.summary,
                             onChange: function(e) { that.setState({summary: e.target.value}); }
                         }
