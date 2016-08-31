@@ -1,5 +1,7 @@
 export PATH := ./node_modules/.bin/:$(PATH)
 
+all: install build
+
 install: install-npm install-bower
 
 install-bower:
@@ -20,7 +22,7 @@ build-css:
 	lessc css/app.less | grep -v removethisline > build/css/all.css
 
 build-html:
-	mkdir build
+	mkdir -p build
 	cp -R site/{*,.htaccess} build/
 
 build: build-js build-css build-html
