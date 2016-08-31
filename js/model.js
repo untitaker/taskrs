@@ -1,6 +1,6 @@
 // vim: set ft=javascript:
 
-/*global module*/
+/*global module require*/
 
 module.exports = function(privateClient) {
     var utils = require("./utils.js");
