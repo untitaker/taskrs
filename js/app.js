@@ -11,7 +11,8 @@ window.remoteStorage = new window.RemoteStorage({
         window: true,
         remote: true,
         conflict: true
-    }
+    },
+    remote: { online: false }
 });
 
 window.RemoteStorage.defineModule("vdir_calendars", require("./model.js"));
@@ -980,7 +981,7 @@ window.remoteStorage.on("ready", function() {
                 that.forceUpdate();
             };
             return e(
-                "div", this.props,
+                "div", {"className": this.props.className},
                 e(
                     "div", {className: "task-checkbox"},
                     e(
