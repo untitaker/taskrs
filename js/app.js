@@ -158,13 +158,13 @@ remoteStorage.on('ready', function() {
                         that.setState({isEditing: !that.state.isEditing});
                     }
                 },
-                (that.state.isEditing ? [
+                (that.state.isEditing ? (
                     e("span", {className: "glyphicon glyphicon-ok"}),
                     " Done"
-                ] : [
+                ) : (
                     e("span", {className: "glyphicon glyphicon-pencil"}),
                     " Edit lists"
-                ])
+                ))
             ));
 
             if(this.state.isLoading) {
@@ -232,7 +232,7 @@ remoteStorage.on('ready', function() {
                         "div", {className: "col-md-4", id: "sidebar"},
                         e("h2", {className: "sr-only"}, "Task lists"),
                         e("p", null, editButton),
-                        e("p", null, taskListsSidebar),
+                        taskListsSidebar,
                         e("p", null, toggleCompletedTasksButton)
                     ),
                     e(
