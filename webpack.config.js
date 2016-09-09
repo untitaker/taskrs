@@ -5,8 +5,8 @@ module.exports = {
         {xmlhttprequest: "{XMLHttpRequest:XMLHttpRequest}"}
     ],
     plugins: [
-        new webpack.optimize.UglifyJsPlugin({
-            compress: { warnings: false }
-        }),
+        //new webpack.optimize.UglifyJsPlugin({
+            //compress: { warnings: false }
+        //}),
     ]
 };

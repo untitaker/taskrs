@@ -2,7 +2,7 @@
 
 /* global require */
 
-require("../lib/remotestorage.amd.js");
+require("remotestoragejs/release/stable/remotestorage.amd.js");
 
 window.remoteStorage = new window.RemoteStorage({
     logging: true,
