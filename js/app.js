@@ -111,8 +111,9 @@ window.remoteStorage.on("ready", function() {
     }
 
     class App extends React.Component {
-        getInitialState() {
-            return {
+        constructor(props) {
+            super(props);
+            this.state = {
                 isLoading: true, isEditing: false, lists: [],
                 shownLists: [], showCompletedTasks: false
             };
@@ -247,8 +248,14 @@ window.remoteStorage.on("ready", function() {
     }
 
     class TaskListSelectorItem extends React.Component {
-        getInitialState() {
-            return {displayName: "", color: null, isActive: true, mode: "normal"};
+        constructor(props) {
+            super(props);
+            this.state = {
+                displayName: "",
+                color: null,
+                isActive: true,
+                mode: "normal"
+            };
         }
         getDefaultProps() {
             return {showEditFunctions: false};
@@ -343,8 +350,9 @@ window.remoteStorage.on("ready", function() {
     }
 
     class TaskListAdder extends React.Component {
-        getInitialState() {
-            return {isAdding: false};
+        constructor(props) {
+            super(props);
+            this.state = {isAdding: false};
         }
         render() {
             var that = this;
@@ -376,8 +384,9 @@ window.remoteStorage.on("ready", function() {
     }
 
     class TaskListEditor extends React.Component {
-        getInitialState() {
-            return {displayName: "", color: ""};
+        constructor(props) {
+            super(props);
+            this.state = {displayName: "", color: ""};
         }
         componentWillMount() {
             var that = this;
@@ -472,8 +481,9 @@ window.remoteStorage.on("ready", function() {
     }
 
     class TaskList extends React.Component {
-        getInitialState() {
-            return {
+        constructor(props) {
+            super(props);
+            this.state = {
                 shownTasks: [],
                 showTaskAdder: false
             };
@@ -607,12 +617,12 @@ window.remoteStorage.on("ready", function() {
     }
 
     class TaskAdder extends React.Component {
-        getInitialState() {
+        constructor(props) {
+            super(props);
+            this.state = {isAdding: null, labelHint: "New Task"};
             this.props.tasklist.getDisplayName().then(function(name) {
                 this.setState({labelHint: "New Task in " + name});
             }.bind(this));
-
-            return {isAdding: null, labelHint: "New Task"};
         }
         startAdd() {
             this.setState({isAdding: this.props.tasklist.newTask()});
@@ -641,8 +651,15 @@ window.remoteStorage.on("ready", function() {
     }
 
     class TaskEditor extends React.Component {
-        getInitialState() {
-            return {summary: "", description: "", dueDate: "", dueTime: "", outdated: false};
+        constructor(props) {
+            super(props);
+            this.state = {
+                summary: "",
+                description: "",
+                dueDate: "",
+                dueTime: "",
+                outdated: false
+            };
         }
         componentDidMount() {
             this.stateFromTask(this.props.task);
@@ -873,8 +890,9 @@ window.remoteStorage.on("ready", function() {
     }
 
     class Task extends React.Component {
-        getInitialState() {
-            return {tasklistColor: null, mode: "collapsed"};
+        constructor(props) {
+            super(props);
+            this.state = {tasklistColor: null, mode: "collapsed"};
         }
         componentWillMount() {
             var that = this;
