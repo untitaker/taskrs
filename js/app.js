@@ -33,9 +33,11 @@ window.remoteStorage.displayWidget();
 window.remoteStorage.on("ready", function() {
     var vdirs = window.remoteStorage.vdir_calendars;
 
-    var Textarea = React.createClass({
-        displayName: "Textarea",
-        render: function() {
+    class Textarea extends React.Component {
+        constructor(props) {
+            super(props);
+        }
+        render() {
             return e("textarea", Object.assign({}, this.props, {
                 ref: function(elem) {
                     if(elem !== null) {
@@ -46,18 +48,16 @@ window.remoteStorage.on("ready", function() {
                 }
             }));
         }
-    });
+    }
 
-    var LoadingStub = React.createClass({
-        displayName: "LoadingStub",
-        render: function() {
+    class LoadingStub extends React.Component {
+        render() {
             return e("div", null, "loading...");
         }
-    });
+    }
 
-    var Welcome = React.createClass({
-        displayName: "Welcome",
-        render: function() {
+    class Welcome extends React.Component {
+        render() {
             return e(
                 "div", null,
                 e(
@@ -108,22 +108,21 @@ window.remoteStorage.on("ready", function() {
                 )
             );
         }
-    });
+    }
 
-    var App = React.createClass({
-        displayName: "App",
-        getInitialState: function() {
+    class App extends React.Component {
+        getInitialState() {
             return {
                 isLoading: true, isEditing: false, lists: [],
                 shownLists: [], showCompletedTasks: false
             };
-        },
-        loadLists: function() {
+        }
+        loadLists() {
             vdirs.getLists().then(function(lists) {
                 this.setState({lists: lists, isLoading: false}, this.loadShownLists);
             }.bind(this));
-        },
-        loadShownLists: function() {
+        }
+        loadShownLists() {
             var that = this;
             var rv = Object.keys(this.refs).filter(function(name) {
                 return name.startsWith("list_");
@@ -137,18 +136,18 @@ window.remoteStorage.on("ready", function() {
             console.log("shownLists", rv);
             this.setState({shownLists: rv});
             return rv;
-        },
-        componentDidMount: function() {
+        }
+        componentDidMount() {
             window.remoteStorage.on("connected", this.loadLists);
             window.remoteStorage.on("not-connected", this.loadLists);
             window.remoteStorage.on("disconnected", this.loadLists);
-        },
-        componentWillUnmount: function() {
+        }
+        componentWillUnmount() {
             window.remoteStorage.removeEventListener("connected", this.loadLists);
             window.remoteStorage.removeEventListener("not-connected", this.loadLists);
             window.remoteStorage.removeEventListener("disconnected", this.loadLists);
-        },
-        render: function() {
+        }
+        render() {
             var that = this;
 
             var editButton = e("small", null, e(
@@ -245,34 +244,34 @@ window.remoteStorage.on("ready", function() {
                 )
             );
         }
-    });
+    }
 
-    var TaskListSelectorItem = React.createClass({
-        displayName: "TaskListSelectorItem",
-        getInitialState: function() {
+    class TaskListSelectorItem extends React.Component {
+        getInitialState() {
             return {displayName: "", color: null, isActive: true, mode: "normal"};
-        },
-        getDefaultProps: function() {
+        }
+        getDefaultProps() {
             return {showEditFunctions: false};
-        },
-        componentWillReceiveProps: function(newProps) {
+        }
+        componentWillReceiveProps(newProps) {
             this.setEditFunctions(newProps);
-        },
-        componentWillMount: function() {
+        }
+        componentWillMount() {
             this.refreshData();
             this.setEditFunctions(this.props);
-        },
-        setEditFunctions: function(newProps) {
+        }
+        setEditFunctions(newProps) {
             if(newProps.showEditFunctions) {
                 this.setState({mode: "showEditFunctions"});
             } else {
                 this.setState({mode: "normal"});
             }
-        },
-        getStyle: function() {
+        }
+        getStyle() {
             return {borderLeft: "3px solid " + this.state.color};
-        },
-        modes: {
+        }
+
+        static modes = {
             editName: function() {
                 return e(TaskListEditor, {
                     list: this.props.tasklist,
@@ -314,8 +313,8 @@ window.remoteStorage.on("ready", function() {
                     this.state.displayName
                 );
             }
-        },
-        refreshData: function() {
+        }
+        refreshData() {
             var that = this;
             this.props.tasklist.getDisplayName().then(function(name) {
                 that.setState({displayName: name});
@@ -323,11 +322,11 @@ window.remoteStorage.on("ready", function() {
             this.props.tasklist.getColor().then(function(color) {
                 that.setState({color: color});
             });
-        },
-        isActive: function() {
+        }
+        isActive() {
             return this.state.isActive;
-        },
-        render: function() {
+        }
+        render() {
             var content = this.modes[this.state.mode].bind(this);
             return e(
                 "li",
@@ -341,13 +340,13 @@ window.remoteStorage.on("ready", function() {
                 content()
             );
         }
-    });
+    }
 
-    var TaskListAdder = React.createClass({
-        getInitialState: function() {
+    class TaskListAdder extends React.Component {
+        getInitialState() {
             return {isAdding: false};
-        },
-        render: function() {
+        }
+        render() {
             var that = this;
             if(this.state.isAdding) {
                 return e(TaskListEditor, {
@@ -374,14 +373,13 @@ window.remoteStorage.on("ready", function() {
                 );
             }
         }
-    });
+    }
 
-    var TaskListEditor = React.createClass({
-        displayName: "TaskListEditor",
-        getInitialState: function() {
+    class TaskListEditor extends React.Component {
+        getInitialState() {
             return {displayName: "", color: ""};
-        },
-        componentWillMount: function() {
+        }
+        componentWillMount() {
             var that = this;
             this.props.list.getDisplayName("").then(function(name) {
                 that.setState({displayName: name});
@@ -389,12 +387,12 @@ window.remoteStorage.on("ready", function() {
             this.props.list.getColor().then(function(color) {
                 that.setState({color: color});
             });
-        },
-        componentDidMount: function() {
+        }
+        componentDidMount() {
             // Focus only once.
             ReactDOM.findDOMNode(this.refs.displayname).focus();
-        },
-        render: function() {
+        }
+        render() {
             var that = this;
             var list = this.props.list;
             console.log("TaskListEditor on", list);
@@ -471,17 +469,16 @@ window.remoteStorage.on("ready", function() {
                 )
             );
         }
-    });
+    }
 
-    var TaskList = React.createClass({
-        displayName: "TaskList",
-        getInitialState: function() {
+    class TaskList extends React.Component {
+        getInitialState() {
             return {
                 shownTasks: [],
                 showTaskAdder: false
             };
-        },
-        loadTasks: function(lists, showCompletedTasks) {
+        }
+        loadTasks(lists, showCompletedTasks) {
             var that = this;
             console.log("Lists: ", lists.map(function(list) {return list.path;}));
 
@@ -523,15 +520,15 @@ window.remoteStorage.on("ready", function() {
                     that.updateEventHandlers();
                 });
             });
-        },
-        clearEventHandlers: function() {
+        }
+        clearEventHandlers() {
             if(this.teardownFunctions) {
                 this.teardownFunctions.map(function(func) {
                     func();
                 });
             }
-        },
-        updateEventHandlers: function() {
+        }
+        updateEventHandlers() {
             var that = this;
             this.clearEventHandlers();
 
@@ -549,12 +546,12 @@ window.remoteStorage.on("ready", function() {
                     list.client.removeEventListener("change", listener);
                 });
             });
-        },
-        componentDidMount: function() {
+        }
+        componentDidMount() {
             this.loadTasks(this.props.shownLists,
                            this.props.showCompletedTasks);
-        },
-        componentWillReceiveProps: function(nextProps) {
+        }
+        componentWillReceiveProps(nextProps) {
             if(
               nextProps.shownLists != this.props.shownLists ||
               nextProps.showCompletedTasks != this.props.showCompletedTasks
@@ -563,8 +560,8 @@ window.remoteStorage.on("ready", function() {
                 this.loadTasks(nextProps.shownLists,
                                nextProps.showCompletedTasks);
             }
-        },
-        render: function() {
+        }
+        render() {
             var taskadder;
             if(this.state.showTaskAdder) {
                 taskadder = e(TaskAdder, {tasklist: this.props.shownLists[0]});
@@ -607,24 +604,23 @@ window.remoteStorage.on("ready", function() {
                 list
             );
         }
-    });
+    }
 
-    var TaskAdder = React.createClass({
-        displayName: "TaskAdder",
-        getInitialState: function() {
+    class TaskAdder extends React.Component {
+        getInitialState() {
             this.props.tasklist.getDisplayName().then(function(name) {
                 this.setState({labelHint: "New Task in " + name});
             }.bind(this));
 
             return {isAdding: null, labelHint: "New Task"};
-        },
-        startAdd: function() {
+        }
+        startAdd() {
             this.setState({isAdding: this.props.tasklist.newTask()});
-        },
-        stopAdd: function() {
+        }
+        stopAdd() {
             this.setState({isAdding: null});
-        },
-        render: function() {
+        }
+        render() {
             var inner;
             if(this.state.isAdding !== null) {
                 var newTask = this.state.isAdding;
@@ -642,26 +638,25 @@ window.remoteStorage.on("ready", function() {
             }
             return e("li", {className: "list-group-item"}, inner);
         }
-    });
+    }
 
-    var TaskEditor = React.createClass({
-        displayName: "TaskEditor",
-        getInitialState: function() {
+    class TaskEditor extends React.Component {
+        getInitialState() {
             return {summary: "", description: "", dueDate: "", dueTime: "", outdated: false};
-        },
-        componentDidMount: function() {
+        }
+        componentDidMount() {
             this.stateFromTask(this.props.task);
             ReactDOM.findDOMNode(this.refs.summary).focus();
-        },
-        componentWillReceiveProps: function(newProps) {
+        }
+        componentWillReceiveProps(newProps) {
             // Task gets a new jcal attribute when it is refetched
             // If it's the same object, this event was probably fired by
             // selecting task lists in the sidebar.
             if(newProps.task.jcal != this._oldJcal) {
                 this.setState({outdated: true});
             }
-        },
-        stateFromTask: function(task) {
+        }
+        stateFromTask(task) {
             var due = task.due && moment(task.due.toJSDate());
             var dueDate = due && due.format("YYYY-MM-DD") || "";
             var dueTime = due && !task.due.isDate && due.format("hh:mm:ss") || "";
@@ -672,8 +667,8 @@ window.remoteStorage.on("ready", function() {
                 dueDate: dueDate,
                 dueTime: dueTime
             });
-        },
-        stateToTask: function(task) {
+        }
+        stateToTask(task) {
             task.summary = this.state.summary;
             task.description = this.state.description;
 
@@ -699,8 +694,8 @@ window.remoteStorage.on("ready", function() {
             } else {
                 task.due = null;
             }
-        },
-        render: function() {
+        }
+        render() {
             var that = this;
             var task = this.props.task;
 
@@ -840,21 +835,20 @@ window.remoteStorage.on("ready", function() {
                 submitButton
             );
         }
-    });
+    }
 
-    var TaskDueLabel = React.createClass({
-        displayName: "TaskDueLabel",
-        componentDidMount: function() {
+    class TaskDueLabel extends React.Component {
+        componentDidMount() {
             this.updateInterval = window.setInterval(
                 this.forceUpdate,
                 1800 * 1000
             );
-        },
-        componentWillUnmount: function() {
+        }
+        componentWillUnmount() {
             window.clearInterval(this.updateInterval);
             this.updateInterval = undefined;
-        },
-        render: function() {
+        }
+        render() {
             var task = this.props.task;
             if(!task.due) {
                 return null;
@@ -876,23 +870,22 @@ window.remoteStorage.on("ready", function() {
             );
             return dueLabel;
         }
-    });
+    }
 
-    var Task = React.createClass({
-        displayName: "Task",
-        getInitialState: function() {
+    class Task extends React.Component {
+        getInitialState() {
             return {tasklistColor: null, mode: "collapsed"};
-        },
-        componentWillMount: function() {
+        }
+        componentWillMount() {
             var that = this;
             this.props.task.tasklist.getColor().then(function(color) {
                 that.setState({tasklistColor: color});
             });
-        },
-        setMode: function(x) {
+        }
+        setMode(x) {
             this.setState({mode: x});
-        },
-        modes: {
+        }
+        static modes = {
             editing: function() {
                 var task = this.props.task;
 
@@ -949,8 +942,8 @@ window.remoteStorage.on("ready", function() {
                     )
                 );
             }
-        },
-        render: function() {
+        }
+        render() {
             var task = this.props.task;
             var inner = this.modes[this.state.mode].bind(this)();
             var className = (
@@ -968,11 +961,10 @@ window.remoteStorage.on("ready", function() {
                 inner
             );
         }
-    });
+    }
 
-    var TaskSingleLineRepr = React.createClass({
-        displayName: "TaskSingleLineRepr",
-        render: function() {
+    class TaskSingleLineRepr extends React.Component {
+        render() {
             var task = this.props.task;
             var that = this;
             var toggleCompleted = function() {
@@ -1009,7 +1001,7 @@ window.remoteStorage.on("ready", function() {
                 )
             );
         }
-    });
+    }
 
     ReactDOM.render(e(App), document.getElementById("layout"));
 });
