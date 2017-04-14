@@ -15,7 +15,7 @@
     "react": "^15.3.1",
     "react-dom": "^15.3.1",
     "remotestoragejs": "^0.14.0",
-    "webpack": "^1.13.2"
+    "webpack": "^2.4.0"
   },
   "devDependencies": {},
   "scripts": {
